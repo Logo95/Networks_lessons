@@ -53,26 +53,25 @@ Application -> User : Отображение статуса атаки
 #### Диаграмма классов
 ```plantuml
 @startuml
-class Application {
-  -interface : str
-  -emulate : bool
-  -count : int
-  +main()
-  +capture_packets()
-  +emulate_attack()
+class PacketCapture {
+    + start_packet_capture(interface: str, stop_event: threading.Event): void
+    - packet_callback(packet): void
+    - detect_ip_fragmentation(packet): void
 }
 
-class PacketAnalyzer {
-  +analyze(packet)
+class IPFragmentationAttack {
+    + emulate_ip_fragmentation_attack(target_ip: str, packet_count: int = 10): void
 }
 
-class PacketGenerator {
-  +generate_fragmented_packets(target_ip, count)
+class Main {
+    + main(interface: str, target_ip: str, packet_count: int): void
 }
 
-Application --> PacketAnalyzer
-Application --> PacketGenerator
+PacketCapture --> IPFragmentationAttack : uses >
+Main --> PacketCapture : uses >
+Main --> IPFragmentationAttack : uses >
 @enduml
+
 ```
 #### Диаграмма последовательностей для захвата и анализа пакетов с последующим отобраением
 ```plantuml
